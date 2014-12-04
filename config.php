@@ -1,5 +1,6 @@
 <?php
 
+define('SITE_TITLE', 'Pageler');
 // Always provide a TRAILING SLASH (/) AFTER A PATH
 define('URL', 'http://localhost:8888/pageler/');
 define('LIBS', 'libs/');
@@ -9,6 +10,10 @@ define('DB_HOST', 'localhost');
 define('DB_NAME', 'Pageler');
 define('DB_USER', 'root');
 define('DB_PASS', 'root');
+
+
+define('GOOGLE_CLIENT_ID', '662672656244-t4n12p66fdnapm2aqos4ota4vtdsgud2.apps.googleusercontent.com');
+define('GOOGLE_CLIENT_SECRET', 'PHUQ1Crxvik6lb3D5P0Um3KS');
 
 // The sitewide hashkey, do not change this because its used for passwords!
 // This is for other hash keys... Not sure yet

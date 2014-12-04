@@ -15,8 +15,8 @@ class Index extends Controller {
 
         require_once realpath(dirname(__FILE__) .'/autoload.php');
 
-        $client_id = '662672656244-t4n12p66fdnapm2aqos4ota4vtdsgud2.apps.googleusercontent.com';
-        $client_secret = 'PHUQ1Crxvik6lb3D5P0Um3KS';
+        $client_id = GOOGLE_CLIENT_ID;
+        $client_secret = GOOGLE_CLIENT_SECRET;
         $redirect_uri = URL;
         $client = new Google_Client();
         $client->setClientId($client_id);
@@ -70,7 +70,7 @@ class Index extends Controller {
         if($error){
             $this->error_message = $error;
         }
-        $this->view->title = 'Pageler';
+        $this->view->title = SITE_TITLE;
         $this->view->authURL = $this->authURL;
         $this->view->render('index/index');
 
