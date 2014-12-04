@@ -12,12 +12,12 @@ class Index extends Controller {
          * It's easier to do it here.
          * TODO - Create a separate sub-routine for Google and Also a new controller to add other OAuth Clients
          */
-        
+
         require_once realpath(dirname(__FILE__) .'/autoload.php');
 
         $client_id = '662672656244-t4n12p66fdnapm2aqos4ota4vtdsgud2.apps.googleusercontent.com';
         $client_secret = 'PHUQ1Crxvik6lb3D5P0Um3KS';
-        $redirect_uri = 'http://localhost:8888/pageler/';
+        $redirect_uri = URL;
         $client = new Google_Client();
         $client->setClientId($client_id);
         $client->setClientSecret($client_secret);
