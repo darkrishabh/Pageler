@@ -13,6 +13,7 @@ class Dashboard extends Controller {
         $this->view->title = 'Dashboard';
         
         $this->view->render('header');
+        $this->view->render('sidebar');
         $this->view->render('dashboard/index');
         $this->view->render('footer');
     }

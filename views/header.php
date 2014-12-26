@@ -16,19 +16,56 @@
     <link rel="stylesheet" type="text/css" href="<?php echo URL; ?>public/assets/css/zabuto_calendar.css">
     <link rel="stylesheet" type="text/css" href="<?php echo URL; ?>public/assets/js/gritter/css/jquery.gritter.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo URL; ?>public/assets/lineicons/style.css">
+    <script type="text/javascript" src="http://gridster.net/demos/assets/jquery.js"></script>
 
     <!-- Custom styles for this template -->
     <link href="<?php echo URL; ?>public/assets/css/style.css" rel="stylesheet">
     <link href="<?php echo URL; ?>public/assets/css/style-responsive.css" rel="stylesheet">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <script src="<?php echo URL; ?>public/assets/js/chart-master/Chart.js"></script>
+    <link rel="shortcut icon" href="<?php echo URL;?>favicon.ico" type="image/x-icon">
+    <link rel="icon" href="<?php echo URL; ?>favicon.ico" type="image/x-icon">
+
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+        div.page_container{
+            width: 140px;
+            border: 2px solid white;
+            padding: 0;
+            border-radius: 10px;
+            color: white;
+            background: rgb(54, 61, 77);
+            margin-top: 10px;
+        }
+        a#pageNameLink{
+            float: left;
+            width: 65%;
+            text-align: left;
+            padding: 0px 0px 0px 7px;
+            color: white;
+            overflow: hidden;
+        }
+        .page_id_delete{
+
+            padding: 0 !important;
+
+            margin-left: 81%;
+            -webkit-appearance: inherit;
+            border-radius: 0px 10px 10px 0px;
+            /* width: 20%; */
+            font-size: 25px !important;
+            /* float: right; */
+            color: white !important;
+            background: rgba(150, 56, 56, 0.75);
+        }
+        .pageDelete i:hover{
+            color:red !important;
+
+        }
+    </style>
 </head>
 
 <body>
@@ -43,7 +80,7 @@
             <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
         </div>
         <!--logo start-->
-        <a href="index.html" class="logo"><b>Pageler</b></a>
+        <a href="<?php echo URL;?>" class="logo"><b>Pageler</b></a>
         <!--logo end-->
         <div class="nav notify-row" id="top_menu">
             <!--  notification start -->

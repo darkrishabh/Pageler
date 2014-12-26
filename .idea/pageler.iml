@@ -4,6 +4,11 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="jquery.gridster" level="application" />
+    <orderEntry type="library" name="jquery-migrate-1.1.1" level="application" />
+    <orderEntry type="library" name="jquery" level="application" />
+    <orderEntry type="library" name="jquery.autogrow-textarea" level="application" />
+    <orderEntry type="library" name="jquery-ui" level="application" />
   </component>
 </module>
 

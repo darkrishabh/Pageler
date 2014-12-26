@@ -12,53 +12,62 @@ class Index extends Controller {
          * It's easier to do it here.
          * TODO - Create a separate sub-routine for Google and Also a new controller to add other OAuth Clients
          */
+        if (isset($_SESSION["loggedIn"]) && !isset($_REQUEST['logout'])) {
+            if (Session::get('loggedIn')) {
 
-        require_once realpath(dirname(__FILE__) .'/autoload.php');
+                header('Location: user/check/');
 
-        $client_id = GOOGLE_CLIENT_ID;
-        $client_secret = GOOGLE_CLIENT_SECRET;
-        $redirect_uri = URL;
-        $client = new Google_Client();
-        $client->setClientId($client_id);
-        $client->setClientSecret($client_secret);
-        $client->setRedirectUri($redirect_uri);
-        $client->setScopes(array('email','profile'));
-        $oauth = new Google_Service_Oauth2($client);
-
-
-        $this->authURL = $client->createAuthUrl();
-        //If Requested to Logout. Kill the Sessions.
-        if (isset($_REQUEST['logout'])) {
-            Session::destroy();
+            }
         }
-        //If a code is received from the Google Login, get the access token.
-        if (isset($_GET['code'])) {
-            $client->authenticate($_GET['code']);
-            Session::set('access_token', $client->getAccessToken());
-        }
-        if (isset($_SESSION['access_token']) && Session::get('access_token')) {
-            $client->setAccessToken(Session::get('access_token'));
-        }
-        //If the Token is registered, fetch the user details. And create the sessions
-        if ($client->getAccessToken()) {
+        try {
+            require_once realpath(dirname(__FILE__) . '/autoload.php');
+            $client_id = GOOGLE_CLIENT_ID;
+            $client_secret = GOOGLE_CLIENT_SECRET;
+            $redirect_uri = URL;
+            $client = new Google_Client();
+            $client->setClientId($client_id);
+            $client->setClientSecret($client_secret);
+            $client->setRedirectUri($redirect_uri);
+            $client->setScopes(array('email', 'profile'));
+            $oauth = new Google_Service_Oauth2($client);
 
-            $token_data = $client->verifyIdToken()->getAttributes();
 
-            Session::set('access_token', $client->getAccessToken());
-            Session::set('loggedIn', true);
-            Session::set('userid', $token_data['payload']['email']);
-            Session::set('name', $oauth->userinfo->get()->getName());
-            Session::set('userpic',$oauth->userinfo->get()->getPicture());
-        }
-        /**
-         * On Logged in Check the user and insert if not existing.
-         */
-        if (isset($_SESSION["loggedIn"])) {
-            if(Session::get('loggedIn')) {
+            $this->authURL = $client->createAuthUrl();
+            //If Requested to Logout. Kill the Sessions.
+            if (isset($_REQUEST['logout'])) {
+                Session::destroy();
+            }
+            //If a code is received from the Google Login, get the access token.
+            if (isset($_GET['code'])) {
+                $client->authenticate($_GET['code']);
+                Session::set('access_token', $client->getAccessToken());
+            }
+            if (isset($_SESSION['access_token']) && Session::get('access_token')) {
+                $client->setAccessToken(Session::get('access_token'));
+            }
+            //If the Token is registered, fetch the user details. And create the sessions
+            if ($client->getAccessToken()) {
+
+                $token_data = $client->verifyIdToken()->getAttributes();
+
+                Session::set('access_token', $client->getAccessToken());
+                Session::set('loggedIn', true);
+                Session::set('userid', $token_data['payload']['email']);
+                Session::set('name', $oauth->userinfo->get()->getName());
+                Session::set('userpic', $oauth->userinfo->get()->getPicture());
+            }
+            /**
+             * On Logged in Check the user and insert if not existing.
+             */
+            if (isset($_SESSION["loggedIn"])) {
+                if (Session::get('loggedIn')) {
 
                     header('Location: user/check/');
 
+                }
             }
+        }catch(Exception $e){
+            //TODO - Catch Exception
         }
     }
 
@@ -68,7 +77,7 @@ class Index extends Controller {
      */
     function index($error = false) {
         if($error){
-            $this->error_message = $error;
+            $this->view->error_message = $error;
         }
         $this->view->title = SITE_TITLE;
         $this->view->authURL = $this->authURL;

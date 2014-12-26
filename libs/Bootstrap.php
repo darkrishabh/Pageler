@@ -124,7 +124,11 @@ class Bootstrap {
         // Make sure the method we are calling exists
         if ($length > 1) {
             if (!method_exists($this->_controller, $this->_url[1])) {
-                $this->_error();
+                if($this->_url[0] == "api"){
+                    $this->_url[1] = "index";
+                } else {
+                    $this->_error();
+                }
             }
         }
         
