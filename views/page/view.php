@@ -195,7 +195,7 @@
                                     size_x: wgd.size_x,
                                     size_y: wgd.size_y,
                                     type  : $($w).attr('type'),
-                                    htmlData: ($($w).children('.editor').val()) ? $($w).children('.editor').val() : $($w).children('.editor').html()
+                                    htmlData: $($w).children('.editor').html()
                                 };
                             }
                         }).data('gridster');
@@ -206,8 +206,8 @@
                                 if(this.type == "text") {
                                     gridster.add_widget('<li type=\"' + this.type
                                         + '\"><header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div>' +
-                                        '</header><textarea class=\"editor\" style=\"resize: none; width: 95%;\">'
-                                        + this.htmlData.replace("\n", "&#13;") + '</textarea></li>', this.size_x, this.size_y, this.col, this.row);
+                                        '</header><div class=\"editor\">' + this.htmlData +
+                                    '</div></li>', this.size_x, this.size_y, this.col, this.row);
                                 } else {
                                     gridster.add_widget('<li type=\"' + this.type
                                     + '\"><header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div>' +
@@ -284,7 +284,9 @@
                                 if(m=="text")
                                     y = "gridster.add_widget('<li id =\"new\" type=\"text\" > " +
                                     "<header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div></header>" +
-                                    "<textarea spellcheck=\"false\" class=\"editor\" style=\"resize: none; width: 95%;\">Add Text Here !</textarea> </li>', 3, 3,"+prev_col+","+prev_row+")";
+                                    "<div class=\"editor\">" +
+                                    "<textarea style=\"font-weight:bold; resize: none; width: 95%;\">Heading</textarea>" +
+                                " <textarea style=\"resize: none; width: 95%;\">Add Text here </textarea></div> </li>', 3, 3,"+prev_col+","+prev_row+")";
                                 else
                                     y = "gridster.add_widget('<li id =\"new\" type=\"image\" > " +
                                     "<header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div></header>" +
@@ -297,12 +299,12 @@
                                 eval(y);
                                 prev_col=1;prev_row=1;col = 1;row=1;m="";
                                 $(function() {
-                                    $('.editor').autogrow();
+                                    $('.editor textarea').autogrow();
                                 });
                             }
                         });
                         $(function() {
-                            $('.editor').autogrow();
+                            $('.editor textarea').autogrow();
                         });
                     });
 
@@ -324,18 +326,23 @@
                     });
                     $('input#edit').click(function(){
                         $('.gridster li header').show();
-                        $('.gridster li textarea').removeAttr('disabled');
+                        $('.editor textarea').removeAttr('disabled');
                         gridster.enable();
                         gridster.enable_resize();
                         $(".drags").show();
                     })
                     $('input#save').click(function(){
+                        $(".editor textarea").each(function(entry){
+                            console.log($(this));
+                            console.log(entry);
+                            $(this).html($(this).val());
+
+                        });
                         gridData = gridster.serialize();
-
                         gridData = "pageData="+JSON.stringify(gridData);
-
+                        console.log(gridData);
                         $('.gridster li header').hide();
-                        $('.gridster li textarea').attr('disabled','disabled');
+                        $('.editor textarea').attr('disabled','disabled');
 
                         gridster.disable();
                         gridster.disable_resize();
