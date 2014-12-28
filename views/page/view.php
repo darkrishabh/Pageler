@@ -80,6 +80,13 @@
        float:left;
        width:93px;
    }
+   .ImageHolder{
+       width:inherit;
+       height:inherit;
+   }
+   .editor{
+       height: inherit !important;
+   }
    .new{
        border:2px solid #2F93E7;
        -webkit-box-shadow: 1px 0px 14px 0px rgba(50, 50, 50, 0.75);
@@ -118,7 +125,7 @@
         font-size: 11px;
         height: 17px;
         padding: 0px 0 0px;
-        margin-bottom: 20px;
+        margin-bottom: 0px;
         cursor: move;
     }
    .gridster ul{
@@ -162,11 +169,33 @@
                 </div>
 
                 <script src="http://gridster.net/dist/jquery.gridster.js" type="text/javascript" charset="utf-8"></script>
+                <script type="text/javascript"
+                        src="http://api.filepicker.io/v1/filepicker.js"></script>
                 <script src="<?php echo URL;?>public/js/jquery.autogrow-textarea.js" type="text/javascript" charset="utf-8"></script>
                 <script type="text/javascript">
                     function getRandomInt(min, max) {
                         return Math.floor(Math.random() * (max - min + 1)) + min;
                     }
+                </script>
+                <script>
+                    function init_link(element) {
+                        console.log($(element).parent());
+                        filepicker.setKey("AZVZVIK0lShe5e4SJdDwVz");
+
+                        filepicker.pick(
+                            {
+                                mimetypes: ['image/*']
+                            },
+                            function(Blob){
+                                console.log(JSON.stringify(Blob));
+                                $(element).parent().replaceWith("<div class=\"ImageHolder editor\"> <div style=\" width: 100%; height: inherit;background: url("+ Blob.url + ") 50% 0px / contain no-repeat !important; background-position: center !important; \"></div></div>");
+                            },
+                            function(FPError){
+                                console.log(FPError.toString());
+                            }
+                        );
+                    }
+
                 </script>
 
                 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
@@ -218,6 +247,7 @@
                                 $('.gridster li header').hide();
                                 $('.gridster li textarea').attr('disabled','disabled');
                                 $('.gridster li textarea').attr('spellcheck',false);
+                                $('a.upload_link').css('pointer-events', 'none');
                                 gridster.disable();
                                 gridster.disable_resize();
                             });
@@ -234,7 +264,7 @@
 
                             },
                             stop: function(){
-                                $(".gridster li").off('mouseenter');
+                                $(".editor").off('mouseenter');
                                 try{
                                     gridster.remove_widget($(".new"));
                                 } catch(e) {
@@ -245,10 +275,15 @@
                         $( ".gridster " ).droppable({
                             accept : ".draggable",
                             activate : function( event, ui ) {
-                                $(".gridster li").on('mouseenter', function(e){
+                                $(".editor").on('mouseenter', function(e){
                                     console.log('enter');
-                                    col = $(e.target).attr('data-col');
-                                    row = $(e.target).attr('data-row');
+                                    ele = $(e.target).parent();
+                                    if($(ele).hasClass('ImageHolder')){
+                                        ele = $(ele).parent();
+                                    }
+                                    console.log(ele);
+                                    col = $(ele).attr('data-col');
+                                    row = $(ele).attr('data-row');
                                     if(((prev_col!=col || prev_row!=row) && (col!=null || row!=null))
                                         || (prev_col==1 && prev_row ==1 && col == 1 && row == 1)){
                                         try{
@@ -258,13 +293,13 @@
                                         }
                                         if(m == "image"){
                                             x = "gridster.add_widget('<li class=\"new\" type=\"image\">add image</li>'" +
-                                            ", 3, 3, "+$(e.target).attr('data-col')+
-                                            ", "+$(e.target).attr('data-row')+");";
+                                            ", 3, 3, "+$(ele).attr('data-col')+
+                                            ", "+$(ele).attr('data-row')+");";
                                             prev = eval(x);
                                         } else{
                                             x = "gridster.add_widget('<li class=\"new\" type=\"text\">Text</li>'" +
-                                            ", 3, 3, "+$(e.target).attr('data-col')+
-                                            ", "+$(e.target).attr('data-row')+");";
+                                            ", 3, 3, "+$(ele).attr('data-col')+
+                                            ", "+$(ele).attr('data-row')+");";
                                             prev = eval(x);
                                         }
 
@@ -275,7 +310,7 @@
                             },
                             drop: function( event, ui ) {
 
-                                $(".gridster li").off('mouseenter');
+                                $(".editor").off('mouseenter');
                                 try{
                                     gridster.remove_widget($(".new"));
                                 } catch(e) {
@@ -292,11 +327,11 @@
                                     "<header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div></header>" +
                                     "<div class=\"ImageHolder editor\" align=\"center\">" +
                                     "<p><img src=\" <?php echo URL;?>public/images/image.png\" class=\"initImage\"></p>" +
-                                    "<form id=\"uploadimage\" method=\"post\" enctype=\"multipart/form-data\"><input type=\"file\" name=\"file\" class=\"file\" required />" +
-                                    "<a href=\"javascript:void(0);\" class=\"upload_link\">Upload Image +</a></div>" +
+                                    "<a href=\"javascript:void(0);\" class=\"upload_link\" onclick=\"init_link(this);\">Upload Image +</a></div>" +
                                     "</li>', 3, 3,"+prev_col+","+prev_row+")";
 
                                 eval(y);
+
                                 prev_col=1;prev_row=1;col = 1;row=1;m="";
                                 $(function() {
                                     $('.editor textarea').autogrow();
@@ -327,11 +362,13 @@
                     $('input#edit').click(function(){
                         $('.gridster li header').show();
                         $('.editor textarea').removeAttr('disabled');
+                        $('a.upload_link').css('pointer-events', 'auto');
                         gridster.enable();
                         gridster.enable_resize();
                         $(".drags").show();
                     })
                     $('input#save').click(function(){
+
                         $(".editor textarea").each(function(entry){
                             console.log($(this));
                             console.log(entry);
@@ -343,6 +380,7 @@
                         console.log(gridData);
                         $('.gridster li header').hide();
                         $('.editor textarea').attr('disabled','disabled');
+                        $('a.upload_link').css('pointer-events', 'none');
 
                         gridster.disable();
                         gridster.disable_resize();
@@ -374,15 +412,7 @@
                     }
 
                 </script>
-            <script>
-                $(function(){
-                    $(".upload_link").on('click', function(e){
-                        e.preventDefault();
-                        $($(this).parent().children('.file')).trigger('click');
-                        return false;
-                    });
-                });
-            </script>
+
                 </div>
             </div>
         </section>

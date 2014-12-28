@@ -24,7 +24,7 @@ MAIN CONTENT
     echo "<h3>Your Pages</h3>";
         foreach ($this->data as $key => $value){
         if ($key == 0) {
-            echo '</div><div class="row col-sm-offset-0 pageList"><div class="col-md-3 col-sm-3 box0">';
+            echo '</div><br><div class="row col-sm-offset-0 pageList"><div class="col-md-3 col-sm-3 box0">';
         } else {
             echo '<div class="col-md-3 col-sm-3 box0">';
         }
