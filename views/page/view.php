@@ -50,18 +50,69 @@
        -o-user-select: text;
        user-select: text;
     }
-
+   
+   .initImage{
+       width:100px;
+       height:100px;
+   }
     *[contenteditable] {-webkit-user-select: text;
         -khtml-user-select: text;
         -moz-user-select: text;
         -o-user-select: text;
         user-select: text;
     }
+    #main-content{
+        background: white;
+    }
+    .file{
+        display: none !important;
+    }
     .gridster-delete{
         color: white;
         float:right;
+        margin-top:2px;
         margin-right: 10px !important;
         cursor: pointer;
+    }
+    .d[type="text"]{
+        float:right;
+        width:93px;
+    }
+   .d[type="image"]{
+       float:left;
+       width:93px;
+   }
+   .new{
+       border:2px solid #2F93E7;
+       -webkit-box-shadow: 1px 0px 14px 0px rgba(50, 50, 50, 0.75);
+       -moz-box-shadow:    1px 0px 14px 0px rgba(50, 50, 50, 0.75);
+       box-shadow:         1px 0px 14px 0px rgba(50, 50, 50, 0.75);
+   }
+    .d{
+        padding: 10px;
+        height: 100px;
+        /* width: 30%; */
+        text-align: center;
+        cursor: move;
+        font-size: 1em;
+        font-weight: 100;
+        border-radius: 5px;
+        border: 1px solid grey;
+        background: rgb(51, 59, 73);
+    }
+    .draggable:active{
+        border:1px solid #fff;
+        padding:5px;
+        -webkit-box-shadow: 1px 0px 14px 0px rgba(50, 50, 50, 0.75);
+        -moz-box-shadow:    1px 0px 14px 0px rgba(50, 50, 50, 0.75);
+        box-shadow:         1px 0px 14px 0px rgba(50, 50, 50, 0.75);
+    }
+    .drags{
+        height:100px;
+    }
+    .gridster li[type='image']{
+        background: #F4F4F4 !important;
+        border: 1px solid #B0AFAF;
     }
     .gridster li header {
         background: #2F93E7;
@@ -72,14 +123,33 @@
         margin-bottom: 20px;
         cursor: move;
     }
+   .gridster ul{
+       background: white;
+   }
+   .gridster li form a{
+       font-size:1em;
+       color: #333333;
+       text-decoration: none;
+       cursor: hand;
+   }
     .gridster li{
         overflow: hidden;
-        border:1px dashed #00c5de;
-        background: white !important;
+        border:1px solid rgba(207, 204, 202, 0.64);
+        border-radius: 10px ;
+        font-weight: normal;
+        line-height: normal;
+        text-align: start;
+
+        background: #fff !important;
     }
     .gridster li textarea{
         border:0px;
+        margin-top:5px;
         outline: none;
+        margin-left:5px;
+    }
+    .gridster{
+        min-height:500px;
     }
    .gridster li textarea:focus{
        border:0px;
@@ -88,26 +158,17 @@
    }
 </style>
 
-                <div id="text">
-                    <input id="txtBox" type="textbox" value="" style="display:none;" />
-                </div>
-
                 <div class="gridster">
                     <ul>
-
                     </ul>
                 </div>
-
 
                 <script src="http://gridster.net/dist/jquery.gridster.js" type="text/javascript" charset="utf-8"></script>
                 <script src="<?php echo URL;?>public/js/jquery.autogrow-textarea.js" type="text/javascript" charset="utf-8"></script>
                 <script type="text/javascript">
-
                     function getRandomInt(min, max) {
                         return Math.floor(Math.random() * (max - min + 1)) + min;
                     }
-
-
                 </script>
 
                 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
@@ -115,18 +176,11 @@
                 <script type="text/javascript">
                     var gridster;
                     var serialization = <?php echo $this->pageValues['pageData'];?>;
-                    var prev_col=1;
-                    var m = "text";
-                    var prev_row=1;
-                    var col = 1;
-                    var row=1;
-                    var prev = null;
-
+                    var prev_col=1;var m = "text";var prev_row=1;var col = 1;var row=1;var prev = null;
 
                     $(function(){
-
                         gridster = $(".gridster ul").gridster({
-                            widget_base_dimensions: [100, 55],
+                            widget_base_dimensions: [90, 55],
                             widget_margins: [5, 5],
                             helper: 'clone',
                             resize: {
@@ -142,15 +196,25 @@
                                     row: wgd.row,
                                     size_x: wgd.size_x,
                                     size_y: wgd.size_y,
-                                    htmlData: $($w).children('.editor').val()
+                                    type  : $($w).attr('type'),
+                                    htmlData: $($w).children('.editor').html()
                                 };
                             }
-
                         }).data('gridster');
+
                         $(function() {
                             gridster.remove_all_widgets();
                             $.each(serialization, function() {
-                                gridster.add_widget('<li><header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div></header><textarea class=\"editor\" style=\"resize: none; width: 95%;\">'+this.htmlData+'</textarea></li>', this.size_x, this.size_y, this.col, this.row);
+                                if(this.type == "text") {
+                                    gridster.add_widget('<li type=\"' + this.type
+                                        + '\"><header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div>' +
+                                        '</header><textarea class=\"editor\" style=\"resize: none; width: 95%;\">'
+                                        + this.htmlData.replace("\n", "&#13;") + '</textarea></li>', this.size_x, this.size_y, this.col, this.row);
+                                } else {
+                                    gridster.add_widget('<li type=\"' + this.type
+                                    + '\"><header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div>' +
+                                    '</header><div class=\"ImageHolder editor\" align=\"center\">' + this.htmlData + '</div></li>', this.size_x, this.size_y, this.col, this.row);
+                                }
                             });
                             $(function() {
                                 $('.gridster li header').hide();
@@ -163,15 +227,19 @@
                         $( ".draggable" ).draggable({
                             revert: true,
                             opacity: 0.7,
+                            stack: ".draggable",
+                            zIndex: 99999,
                             start: function(){
-
                                 m = $(this).attr('type');
-                                console.log(m);
-                                prev_col=1;
-                                prev_row=1;
-                                col = 1;
-                                row=1;
-                                prev = null;
+                                prev_col=1;prev_row=1;col = 1;row=1;prev = null;
+                            },
+                            stop: function(){
+                                $(".gridster li").off('mouseenter');
+                                try{
+                                    gridster.remove_widget($(".new"));
+                                } catch(e) {
+                                    console.log(e);
+                                }
                             }
                         });
                         $( ".gridster " ).droppable({
@@ -184,50 +252,51 @@
                                     if(((prev_col!=col || prev_row!=row) && (col!=null || row!=null))
                                         || (prev_col==1 && prev_row ==1 && col == 1 && row == 1)){
                                         try{
-
-                                            console.log("remove");
-
                                             gridster.remove_widget($(".new"));
-                                        }
-                                        catch(e)
-                                        {
+                                        } catch(e) {
                                             console.log(e);
                                         }
                                         if(m == "image"){
-                                            x = "gridster.add_widget('<li class=\"new\">add image</li>', 1, 1, "+$(e.target).attr('data-col')+", "+$(e.target).attr('data-row')+");";
+                                            x = "gridster.add_widget('<li class=\"new\" type=\"image\">add image</li>'" +
+                                            ", 3, 3, "+$(e.target).attr('data-col')+
+                                            ", "+$(e.target).attr('data-row')+");";
+                                            prev = eval(x);
+                                        } else{
+                                            x = "gridster.add_widget('<li class=\"new\" type=\"text\">Text</li>'" +
+                                            ", 3, 3, "+$(e.target).attr('data-col')+
+                                            ", "+$(e.target).attr('data-row')+");";
                                             prev = eval(x);
                                         }
-                                        else{
-                                            x = "gridster.add_widget('<li class=\"new\">new</li>', 1, 1, "+$(e.target).attr('data-col')+", "+$(e.target).attr('data-row')+");";
-                                            prev = eval(x);
-                                        }
-                                        //prev = gridster.add_widget('<li id="new">new</li>', 1, 1, $(e.target).attr('data-col'), $(e.target).attr('data-row'));
-                                        //prev = eval(x);
+
                                         prev_col=col;
                                         prev_row=row;
                                     }
                                 });
                             },
                             drop: function( event, ui ) {
-                                //$( ".draggable" ).removeAttr("style");
 
                                 $(".gridster li").off('mouseenter');
                                 try{
-
-                                    console.log("remove");
                                     gridster.remove_widget($(".new"));
-                                }
-                                catch(e)
-                                {
+                                } catch(e) {
                                     console.log(e);
                                 }
-                                y = "gridster.add_widget('<li id =\"new\"  > <header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div></header><textarea class=\"editor\" style=\"resize: none; width: 95%;\">hi</textarea> </li>', 3, 3,"+prev_col+","+prev_row+")";
+                                console.log(m);
+                                if(m=="text")
+                                    y = "gridster.add_widget('<li id =\"new\" type=\"text\" > " +
+                                    "<header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div></header>" +
+                                    "<textarea class=\"editor\" style=\"resize: none; width: 95%;\">Add Text Here !</textarea> </li>', 3, 3,"+prev_col+","+prev_row+")";
+                                else
+                                    y = "gridster.add_widget('<li id =\"new\" type=\"image\" > " +
+                                    "<header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div></header>" +
+                                    "<div class=\"ImageHolder editor\" align=\"center\">" +
+                                    "<p><img src=\" <?php echo URL;?>public/images/image.png\" class=\"initImage\"></p>" +
+                                    "<form id=\"uploadimage\" method=\"post\" enctype=\"multipart/form-data\"><input type=\"file\" name=\"file\" class=\"file\" required />" +
+                                    "<a href=\"javascript:void(0);\" class=\"upload_link\">Upload Image +</a></div>" +
+                                    "</li>', 3, 3,"+prev_col+","+prev_row+")";
+
                                 eval(y);
-                                prev_col=1;
-                                prev_row=1;
-                                col = 1;
-                                row=1;
-                                m="";
+                                prev_col=1;prev_row=1;col = 1;row=1;m="";
                                 $(function() {
                                     $('.editor').autogrow();
                                 });
@@ -238,12 +307,8 @@
                         });
                     });
 
-
-
                     $(function(){
                         clicked=0;
-
-
                         $('.js-resize-random').on('click', function() {
                             gridster.resize_widget(gridster.$widgets.eq(getRandomInt(0, 9)),
                                 getRandomInt(1, 4), getRandomInt(1, 4))
@@ -252,17 +317,11 @@
                         $(".editor").focus(function(){
                             $(this).parent().css("border","1px solid #9ecaed");
                             $(this).parent().css("box-shadow", "#9ecaed");
-
-
                         })
                             .blur(function(){
                                 $(this).parent().css("border","0px solid #9ecaed");
                                 $(this).parent().css("box-shadow", "none");
                             });
-
-
-
-
                     });
                     $('input#edit').click(function(){
                         $('.gridster li header').show();
@@ -275,10 +334,13 @@
                         gridData = gridster.serialize();
                         gridData = "pageData="+JSON.stringify(gridData);
                         console.log(JSON.stringify(gridData));
+
                         $('.gridster li header').hide();
                         $('.gridster li textarea').attr('disabled','disabled');
+
                         gridster.disable();
                         gridster.disable_resize();
+
                         $.post( "<?PHP echo URL;?>page/update/<?php echo $this->pageValues['pageID'] ?>", gridData)
                             .done(function( result ) {
 
@@ -297,19 +359,24 @@
                                         // (string | optional) the class name you want to apply to that specific message
                                         class_name: 'my-sticky-class'
                                     });
-
-
                                 });
-
-
                             });
                         $(".drags").hide();
                     })
                     function gridDelete(element){
                        console.log(gridster.remove_widget($(element).parent().parent()));
                     }
-                </script>
 
+                </script>
+            <script>
+                $(function(){
+                    $(".upload_link").on('click', function(e){
+                        e.preventDefault();
+                        $($(this).parent().children('.file')).trigger('click');
+                        return false;
+                    });
+                });
+            </script>
                 </div>
             </div>
         </section>

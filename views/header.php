@@ -48,6 +48,14 @@
             color: white;
             overflow: hidden;
         }
+        #settings {
+            text-align: center;
+            color: rgb(174, 178, 183);
+            border-top: 2px solid rgb(97, 103, 118);
+            border-bottom: 2px solid rgb(97, 103, 118);
+            background: rgb(66, 74, 93);
+            font-weight: 200;
+        }
         .page_id_delete{
 
             padding: 0 !important;

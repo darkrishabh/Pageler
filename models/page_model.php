@@ -62,11 +62,13 @@ class Page_Model extends Model {
     }
 
     public function updatePage($id, $data){
-        $postData = array(
-            'pageData' => $data['pageData']
-        );
 
-        $this->db->update('page', $postData,
-            "`pageID` = '{$id}' AND userID = '{$_SESSION['userid']}'");
+        try{
+            $this->db->update('page', $data,
+                "`pageID` = '{$id}' AND userID = '{$_SESSION['userid']}'");
+            return true;
+        }catch(Exception $e){
+            return false;
+        }
     }
 }

@@ -45,25 +45,38 @@ class Page extends Controller {
                 $isAdded = $this->model->addPage($data);
                 echo $isAdded;
             } else echo false;
-        }
-        echo false;
+        } else
+            echo false;
     }
 
     public function update($id){
+        $data = array();
+        $isUpdated = null;
         if($_POST){
-            if(trim($_POST['pageData']) != ""){
-                $data = array(
-                    "pageData" => $_POST['pageData']
-                );
-                $isUpdated = $this->model->updatePage($id,$data);
-                echo $isUpdated;
-            } else echo false;
+            foreach($_POST as $key => $value){
+                if(($key == "pageData" || $key=="pageName") && (trim($value) != ""))
+                    $data[$key] = $value;
+            }
+            if(sizeof($data) > 0) {
+                try {
+                    $isUpdated = $this->model->updatePage($id, $data);
+                } catch (Exception $e) {
+                    echo "Failed";
+                }
+            }
+            if( $isUpdated ){
+                echo "Success";
+            }
+            else {
+                echo "failed";
+            }
+        } else{
+            echo "No Post";
         }
-        echo false;
+
 
     }
     public function delete($id){
-
         $this->model->delete($id);
 
     }

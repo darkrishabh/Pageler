@@ -11,18 +11,8 @@ class api extends Controller {
     function __construct()
     {
         parent::__construct();
-        $this->response=array(
-            "response" => array(
-                "status"    => "200",
-                "message"   => "Ok",
-                "error"     => null,
-                "data"      => null,
-                "user"      => array(
-                    "userEmail" =>  "",
-                    "userID"    =>  ""
-                )
-            )
-        );
+
+        $this->responseOject = new APIResponse();
 
         $this->type = "json";
 
@@ -38,17 +28,14 @@ class api extends Controller {
      * Method to Validate the User connection
      */
     function validate(){
-        $api_key = $_SERVER['HTTP_X_API_KEY'];
+        $api_key = (isset($_SERVER['HTTP_X_API_KEY'])) ? $_SERVER['HTTP_X_API_KEY'] : null;
         if($userInfo = $this->model->isAuth($api_key)) {
-            $this->response['response']['user']['userEmail'] = $userInfo[0]['userEmail'];
-            $this->response['response']['user']['userID'] = $userInfo[0]['userID'];
+            $this->responseOject->build_user($userInfo[0]);
             $this->userID = $userInfo[0]['userEmail'];
             return true;
         }
-        $this->response['response']['status'] = "403";
-        $this->response['response']['message'] = "Wrong API Key";
-        $this->response['response']['error'] = "Forbidden Access, valid API key required";
-        echo json_encode($this->response);
+        $this->responseOject->build_error_response(403, WRONG_API_MESSAGE, FORBIDDEN_ERROR);
+        $this->responseOject->sendResponse($this->type);
         exit;
 
     }
@@ -57,37 +44,39 @@ class api extends Controller {
         /**
          * Not found methods are directed here.
          */
+        echo "blah";
     }
 
     function pages(){
         // check if request is valid
         $this->validate();
-        //based on the request method execute the process
+
         switch($this->method){
             CASE "GET":
                 @http_response_code(200);
-                    $this->response['response']['data'] = $this->model->getList($this->userID);
+                $this->responseOject->build_data($this->model->getList($this->userID));
                 break;
             CASE "POST":
                 if(!isset($_REQUEST['pageName'])){
                     @http_response_code(422);
-                    $this->response['response']['status'] = "422";
-                    $this->response['response']['message'] = "Wrong Request Data";
-                    $this->response['response']['error'] = "POST data sent was not processed.";
+                    $this->responseOject->build_error_response(422,
+                        "Wrong Request Data", "POST data sent was not processed.");
                 }
                 else{
                     if($insertID = $this->model->addPage($this->userID, $_REQUEST)) {
-                        $this->response['response']['data'] = array(
+                        $this->responseOject->build_data(array(
                             "success"   => true,
                             "InsertID"  => $insertID,
                             "message"   => "Page Successfully Inserted"
+                            )
                         );
                     }
                     else{
-                        $this->response['response']['data'] = array(
+                        $this->responseOject->build_data(array(
                             "success"   => false,
                             "Reason"  => "Internal Error.",
                             "message"   => "Could not process the data. Contact Customer Support."
+                            )
                         );
                     }
                 }
@@ -95,7 +84,7 @@ class api extends Controller {
         }
         //create the response.
 
-        APIResponse::sendResponse($this->response, $this->type);
+        $this->responseOject->sendResponse($this->type);
     }
     /**
      * @param null $id
@@ -107,63 +96,65 @@ class api extends Controller {
         //Check if Page exists or You are the owner.
         if(sizeof($this->model->fetchOnePage($this->userID, $id)) == 0){
             if($this->model->notYours($this->userID, $id)){
-                $this->response['response']['data'] = array(
+                $this->responseOject->build_data( array(
                     "success"   => false,
-                    "message"   => "Failed to Delete the Page"
+                    "message"   => "Failed to Find the Page"
+                    )
                 );
                 @http_response_code(403);
-                $this->response['response']['status'] = "403";
-                $this->response['response']['message'] = "Forbidden Content";
-                $this->response['response']['error'] = "You don't have access to this content.";
+                $this->responseOject->build_error_response(403,
+                    "Forbidden Content", "You don't have access to this content.");
             }
             else {
-                $this->response['response']['data'] = array(
+                $this->responseOject->build_data( array(
                     "success" => false,
                     "message" => "Failed to Delete the Page"
+                    )
                 );
 
                 @http_response_code(404);
-                $this->response['response']['status'] = "404";
-                $this->response['response']['message'] = "Content Not Found";
-                $this->response['response']['error'] = "Content not Found";
+                $this->responseOject->build_error_response(404,
+                    "Content Not Found", "Content Not Found");
             }
         } else {
 
             switch ($this->method) {
                 CASE "GET":
-                    $this->response['response']['data'] = $this->model->fetchOnePage($this->userID, $id);
+                    $this->responseOject->build_data($this->model->fetchOnePage($this->userID, $id));
                     break;
                 CASE "PUT":
                     $x = explode('=',file_get_contents("php://input"));
                     $data[$x[0]]= $x[1];
 
                     $this->model->updatePage($this->userID, $id, $data);
-                    $this->response['response']['data'] = array(
+                    $this->responseOject->build_data( array(
                         "success" => true,
                         "message" => "Page Successfully Updated"
+                        )
                     );
                     break;
                 CASE "DELETE":
                      if ($this->model->deletePage($this->userID, $id)) {
-                        $this->response['response']['data'] = array(
+                         $this->responseOject->build_data( array(
                             "success" => true,
                             "message" => "Page Successfully Deleted"
-                        );
+                            )
+                         );
                     } else {
-                        $this->response['response']['data'] = array(
+                         $this->responseOject->build_data(array(
                             "success" => false,
                             "message" => "Failed to Delete the Page"
-                        );
-                        @http_response_code(422);
-                        $this->response['response']['status'] = "422";
-                        $this->response['response']['message'] = "Wrong Request Data";
-                        $this->response['response']['error'] = "POST data sent was not processed.";
+                            )
+                         );
+                         @http_response_code(422);
+                         $this->responseOject->build_error_response(422,
+                             "Wrong Request Data", "POST data sent was not processed.");
                     }
                     break;
             }
         }
-        //create the response.
+        //send the response.
 
-        APIResponse::sendResponse($this->response, $this->type);
+        $this->responseOject->sendResponse($this->type);
     }
 }

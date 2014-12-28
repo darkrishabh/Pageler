@@ -59,7 +59,7 @@ class Database extends PDO
      */
     public function update($table, $data, $where)
     {
-        ksort($data);
+        @ksort($data);
         
         $fieldDetails = NULL;
         foreach($data as $key=> $value) {

@@ -113,8 +113,7 @@ MAIN SIDEBAR MENU
         <ul class="sidebar-menu" id="nav-accordion" >
 
             <p class="centered"><a href="#"><img src="<?php echo $_SESSION['userpic']; ?>" class="img-circle" width="60"></a></p>
-            <h5 class="centered"><?php echo $_SESSION['name']; ?></h5>
-
+            <h5 class="centered"><?php echo $_SESSION['name']; ?></h5><hr>
             <li class="mt">
                 <a href="<?php echo URL;?>dashboard/index">
                     <i class="fa fa-dashboard"></i>
@@ -123,8 +122,8 @@ MAIN SIDEBAR MENU
             </li>
             <li class='drags' style="display: none">
             <div id="row">
-                <div class="col-md-6 draggable" type="image" style="border:1px solid white; color:white">Image</div>
-                <div class="col-md-6 draggable" type = "text" style="border:1px solid white; color:white">Text</div>
+                <div class="col-md-6 d" type="image" style="border:1px solid white; color:white"><i class="fa fa-image fa-3x draggable" type="image"></i> Image</div>
+                <div class="col-md-6 d" type = "text" style="border:1px solid white; color:white"><i class="fa fa-font fa-3x draggable" type="text"></i>Text</div>
             </div>
                 <br>
             </li>
@@ -183,7 +182,8 @@ MAIN SIDEBAR MENU
             </li>
 
 
-        </ul>
+        </ul><br>
+        <div id="settings"><i class="fa fa-gears"></i> Settings</div>
         <div class="switch">
             <input type="radio" class="switch-input" name="view" value="save" id="save" checked>
             <label for="save" class="switch-label switch-label-off">Save</label>

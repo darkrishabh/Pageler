@@ -57,4 +57,9 @@ class User_Model extends Model
 
     }
 
+    function getAPIKey($userEmail){
+        return $this->db->select('SELECT APIKey FROM user WHERE userEmail = :userid',
+            array('userid' => $userEmail))[0];
+    }
+
 }

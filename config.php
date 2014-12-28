@@ -29,3 +29,5 @@ define('HASH_PASSWORD_KEY', 'catsFLYhigh2000miles');
 define('USER_INSERT_FAILED', 'Failed to insert the User');
 define('PAGE_ADDED_SUCCESFULLY', 'Page was created.');
 define('USER_NOT_ENTERED', 'Cannot add user. Please try again');
+define('WRONG_API_MESSAGE', 'Wrong or Missing API Key');
+define('FORBIDDEN_ERROR', 'Forbidden access - A valid key is required');

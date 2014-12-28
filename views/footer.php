@@ -14,7 +14,8 @@
 
 <!-- js placed at the end of the document so the pages load faster -->
 <script src="<?php echo URL; ?>public/assets/js/bootstrap.min.js"></script>
-<script class="include" type="text/javascript" src="<?php echo URL; ?>public/assets/js/jquery.dcjqaccordion.2.7.js"></script>
+<script class="include" type="text/javascript"
+        src="<?php echo URL; ?>public/assets/js/jquery.dcjqaccordion.2.7.js"></script>
 <script src="<?php echo URL; ?>public/assets/js/jquery.scrollTo.min.js"></script>
 <script src="<?php echo URL; ?>public/assets/js/jquery.nicescroll.js" type="text/javascript"></script>
 <script src="<?php echo URL; ?>public/assets/js/jquery.sparkline.js"></script>
@@ -52,7 +53,7 @@
             },
             legend: [
                 {type: "text", label: "Special event", badge: "00"},
-                {type: "block", label: "Regular event", }
+                {type: "block", label: "Regular event",}
             ]
         });
     });
@@ -67,28 +68,28 @@
 </script>
 
 <script>
-    $("#addpagebtn").click(function(){
+    $("#addpagebtn").click(function () {
         //add page - post silently
-        var page_name =  $("input#addpagetext").val();
+        var page_name = $("input#addpagetext").val();
         console.log(page_name);
         var data = $("form#addPage").serialize();
         console.log(data);
         var x = $('input:text[value=""]', '#addPage');
         console.log(x.size());
-        if(x.size()!=0 ) {
-            $("input#addpagetext").parent().css('border-color','red');
+        if (x.size() != 0) {
+            $("input#addpagetext").parent().css('border-color', 'red');
             alert("Enter a Name");
 
-        }else {
+        } else {
             $("input#addpagetext").parent().css('border-color', 'white');
-            $.post( "<?PHP echo URL;?>page/add", data)
-                .done(function( result ) {
+            $.post("<?PHP echo URL;?>page/add", data)
+                .done(function (result) {
 
-                    var html="<li><div class='page_container' id='cont_"+result+"'>"
-                        +"<a href='<?php echo URL;?>page/view/"+ result +" ' id='pageNameLink'>" + page_name + "</a>"
-                        +"<a href='javascript:;' class='pageEdit'  onclick='editPageName(this);'><i class='fa fa-pencil'></i></a>"
-                        +"<a href='javascript:;' class='page_id_delete' onclick='deletePage($(this));' id='page_" + result + "'>X</a>"
-                        +"</div></li>";
+                    var html = "<li><div class='page_container' id='cont_" + result + "'>"
+                        + "<a href='<?php echo URL;?>page/view/" + result + " ' id='pageNameLink'>" + page_name + "</a>"
+                        + "<a href='javascript:;' class='pageEdit'  onclick='editPageName(this);'><i class='fa fa-pencil'></i></a>"
+                        + "<a href='javascript:void(0);' class='pageDelete' onclick='deletePage($(this));'><i class='fa fa-trash-o'></i></a>"
+                        + "</div></li>";
 
 
                     console.log(html);
@@ -100,44 +101,51 @@
         }
         return false;
     })
-    function deletePage(object){
+    function deletePage(object) {
         var page_id = object.parent().attr("id").split('_')[1];
-        $.post( "<?PHP echo URL;?>page/delete/"+page_id)
-            .done(function( ) {
+        $.post("<?PHP echo URL;?>page/delete/" + page_id)
+            .done(function () {
                 object.parent().remove();
 
             });
 
 
-
     }
-    function editPageName(ele){
+    function editPageName(ele) {
         nameEle = $(ele).parent().children('#pageNameLink');
         var page_id = $(ele).parent().attr("id").split('_')[1];
         console.log(page_id);
-        nameEle.hide();
+        $(nameEle).attr('style', 'display:none !important');
         nameEle.after('<input type="text" id="editpageNameLink" style="background:rgb(54, 61, 77); width:65%;' +
-        'border:1px solid white;" value="'+ nameEle.text() +'"/>');
-
-
+        'border:1px solid white;" value="' + nameEle.text() + '"/>');
         $('#editpageNameLink').focus();
-        $('#editpageNameLink').blur(function(){
-           //update pageName
-            data = "pageName="+$('#editpageNameLink').val();
+        $('#editpageNameLink').blur(function () {
+            //update pageName
+            pageName = $('#editpageNameLink').val();
+            data = "pageName=" + pageName;
             console.log(data);
-            nameEle.show();
+            $(nameEle).removeAttr('style');
             $(this).remove();
-            $.post( "<?PHP echo URL;?>page/update/"+page_id, data)
-                .done(function( result ) {
+            $.post("<?PHP echo URL;?>page/update/" + page_id, data)
+                .done(function (result) {
+                    console.log(result);
+                    if(result != "Success"){
+                        // no change in the name
+                        alert(1);
+                        return false;
+                    } else {
+
+                        // change the name
+                        $(nameEle).html( pageName );
+                    }
+                });
         });
-    });
     }
 </script>
 
 <div id="footer">
     (C) Rishabh Mehan
 </div>
-
 
 
 </body>
