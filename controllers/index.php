@@ -9,8 +9,6 @@ class Index extends Controller {
         /**
          * Google OAuth2 Login.
          *
-         * It's easier to do it here.
-         * TODO - Create a separate sub-routine for Google and Also a new controller to add other OAuth Clients
          */
         if (isset($_SESSION["loggedIn"]) && !isset($_REQUEST['logout'])) {
             if (Session::get('loggedIn')) {
@@ -67,7 +65,7 @@ class Index extends Controller {
                 }
             }
         }catch(Exception $e){
-            //TODO - Catch Exception
+
         }
     }
 

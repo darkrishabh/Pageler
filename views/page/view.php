@@ -231,6 +231,7 @@
                             start: function(){
                                 m = $(this).attr('type');
                                 prev_col=1;prev_row=1;col = 1;row=1;prev = null;
+
                             },
                             stop: function(){
                                 $(".gridster li").off('mouseenter');
@@ -242,12 +243,12 @@
                             }
                         });
                         $( ".gridster " ).droppable({
-                            over: function( event, ui ) {
-
+                            accept : ".draggable",
+                            activate : function( event, ui ) {
                                 $(".gridster li").on('mouseenter', function(e){
+                                    console.log('enter');
                                     col = $(e.target).attr('data-col');
                                     row = $(e.target).attr('data-row');
-                                    console.log($(e.target).attr('data-col') +"," + $(e.target).attr('data-row') );
                                     if(((prev_col!=col || prev_row!=row) && (col!=null || row!=null))
                                         || (prev_col==1 && prev_row ==1 && col == 1 && row == 1)){
                                         try{
@@ -280,7 +281,6 @@
                                 } catch(e) {
                                     console.log(e);
                                 }
-                                console.log(m);
                                 if(m=="text")
                                     y = "gridster.add_widget('<li id =\"new\" type=\"text\" > " +
                                     "<header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div></header>" +
@@ -331,10 +331,8 @@
                     })
                     $('input#save').click(function(){
                         gridData = gridster.serialize();
-                        console.log(gridData);
 
                         gridData = "pageData="+JSON.stringify(gridData);
-                        console.log(JSON.stringify(gridData));
 
                         $('.gridster li header').hide();
                         $('.gridster li textarea').attr('disabled','disabled');

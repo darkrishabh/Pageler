@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="Dashboard">
-    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <meta name="description" content="Pageler provides a dynamic web content builder. Unlike others it provides a simple layout that generates a page for you which can be exported to any where as a static template">
+    <meta name="author" content="Rishabh Mehan">
+    <meta name="keyword" content="Pageler, web design, Fluid">
 
     <title><?PHP echo $this->title; ?></title>
 
