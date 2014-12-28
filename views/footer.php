@@ -100,13 +100,24 @@
 
         }
         return false;
-    })
+    });
+
+    function dashboardDeletePage(object){
+        console.log(object.id);
+        var page_id = object.id.split('_')[1];
+        $.post("<?PHP echo URL;?>page/delete/" + page_id)
+            .done(function () {
+                $('div#'+object.id).parent().remove();
+                $('div#cont_'+page_id).parent().remove();
+
+            });
+    }
     function deletePage(object) {
         var page_id = object.parent().attr("id").split('_')[1];
         $.post("<?PHP echo URL;?>page/delete/" + page_id)
             .done(function () {
                 object.parent().remove();
-
+                $('div#page_'+ page_id).parent().remove();
             });
 
 

@@ -31,3 +31,4 @@ define('PAGE_ADDED_SUCCESFULLY', 'Page was created.');
 define('USER_NOT_ENTERED', 'Cannot add user. Please try again');
 define('WRONG_API_MESSAGE', 'Wrong or Missing API Key');
 define('FORBIDDEN_ERROR', 'Forbidden access - A valid key is required');
+define('INITIAL_PAGE','[{"id":"new","col":1,"row":1,"size_x":3,"size_y":3,"type":"text","htmlData":"Start Building HERE"},{"id":"new","col":4,"row":1,"size_x":6,"size_y":3,"type":"image","htmlData":"<p><img src=\" http://localhost:8888/pageler/public/images/image.png\" class=\"initImage\"></p><form id=\"uploadimage\" method=\"post\" enctype=\"multipart/form-data\"><input type=\"file\" name=\"file\" class=\"file\" required=\"\"><a href=\"javascript:void(0);\" class=\"upload_link\">Upload Image  </a></form>"},{"id":"new","col":10,"row":1,"size_x":3,"size_y":3,"type":"text","htmlData":"Add More"}]');

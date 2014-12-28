@@ -44,7 +44,7 @@ class Page_Model extends Model {
             $this->db->insert('page', array(
                 'pageName' => $data['pageName'],
                 'userID' => $_SESSION['userid'],
-                'pageData' => "{}"
+                'pageData' => INITIAL_PAGE
             ));
         } catch(Exception $e){
             return false;

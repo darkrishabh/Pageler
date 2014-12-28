@@ -50,7 +50,7 @@
        -o-user-select: text;
        user-select: text;
     }
-   
+
    .initImage{
        width:100px;
        height:100px;
@@ -61,9 +61,7 @@
         -o-user-select: text;
         user-select: text;
     }
-    #main-content{
-        background: white;
-    }
+
     .file{
         display: none !important;
     }
@@ -197,7 +195,7 @@
                                     size_x: wgd.size_x,
                                     size_y: wgd.size_y,
                                     type  : $($w).attr('type'),
-                                    htmlData: $($w).children('.editor').html()
+                                    htmlData: ($($w).children('.editor').val()) ? $($w).children('.editor').val() : $($w).children('.editor').html()
                                 };
                             }
                         }).data('gridster');
@@ -219,6 +217,7 @@
                             $(function() {
                                 $('.gridster li header').hide();
                                 $('.gridster li textarea').attr('disabled','disabled');
+                                $('.gridster li textarea').attr('spellcheck',false);
                                 gridster.disable();
                                 gridster.disable_resize();
                             });
@@ -285,7 +284,7 @@
                                 if(m=="text")
                                     y = "gridster.add_widget('<li id =\"new\" type=\"text\" > " +
                                     "<header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div></header>" +
-                                    "<textarea class=\"editor\" style=\"resize: none; width: 95%;\">Add Text Here !</textarea> </li>', 3, 3,"+prev_col+","+prev_row+")";
+                                    "<textarea spellcheck=\"false\" class=\"editor\" style=\"resize: none; width: 95%;\">Add Text Here !</textarea> </li>', 3, 3,"+prev_col+","+prev_row+")";
                                 else
                                     y = "gridster.add_widget('<li id =\"new\" type=\"image\" > " +
                                     "<header><div class=\"gridster-delete\" onclick=\"gridDelete(this);\">X</div></header>" +
@@ -332,6 +331,8 @@
                     })
                     $('input#save').click(function(){
                         gridData = gridster.serialize();
+                        console.log(gridData);
+
                         gridData = "pageData="+JSON.stringify(gridData);
                         console.log(JSON.stringify(gridData));
 
