@@ -23,6 +23,7 @@ class P extends Controller {
             header("Location: ".URL."");
         } else {
             $this->view->pageValues = $this->model->fetchData($id)[0];
+            $this->view->title = $this->view->pageValues['pageName'];
             $this->view->render("p/view");
         }
     }

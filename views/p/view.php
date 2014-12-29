@@ -6,7 +6,7 @@
     <meta name="description" content="Pageler provides a dynamic web content builder. Unlike others it provides a simple layout that generates a page for you which can be exported to any where as a static template">
     <meta name="author" content="Rishabh Mehan">
     <meta name="keyword" content="Pageler, web design, Fluid">
-
+    <title><?= (isset($this->title)) ? $this->title:"Pageler"; ?></title>
     <!-- Bootstrap core CSS -->
     <link href="<?php echo URL; ?>public/assets/css/bootstrap.css" rel="stylesheet">
     <!--external css-->
@@ -29,6 +29,9 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
+        .black-bg {
+            background: rgba(68, 143, 162, 0.6);
+        }
         #main-content{
             background: white;
             margin-left:0px !important;
@@ -201,11 +204,19 @@
             outline: none;
 
         }
-        .wrapper{
-            margin-top:0px;
-        }
+
     </style>
 </head>
+<!--header start-->
+<header class="header black-bg">
+    <div class="sidebar-toggle-box">
+
+    </div>
+    <!--logo start-->
+    <a href="<?php echo URL;?>" class="logo"><b>Pageler</b></a>
+    <!--logo end-->
+</header>
+<!--header end-->
 <section id="container" >
 <section id="main-content">
     <section class="wrapper">
