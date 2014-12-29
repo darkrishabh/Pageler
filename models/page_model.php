@@ -55,10 +55,17 @@ class Page_Model extends Model {
     /**
      * Deletes the Page.
      * @param $id - the page ID to be deleted.
+     * @return bool
      */
     public function delete($id)
     {
-        $this->db->delete('page', "`pageID` = {$id} AND userID = '{$_SESSION['userid']}'");
+        try {
+            $this->db->delete('page', "`pageID` = {$id} AND userID = '{$_SESSION['userid']}'");
+            $this->db->delete('publish_page', "`pageID` = {$id}");
+            return true;
+        } catch(Exception $e){
+            return false;
+        }
     }
 
     public function updatePage($id, $data){
@@ -70,5 +77,35 @@ class Page_Model extends Model {
         }catch(Exception $e){
             return false;
         }
+    }
+
+    public function publish($id){
+        try{
+            $hashkey = substr(Hash::create("md5",$id,HASH_GENERAL_KEY),0,8);
+            $this->db->insert('publish_page', array(
+                'pageID' => $id,
+                'pageCode' => $hashkey
+            ));
+            return $hashkey;
+        } catch(Exception $e){
+            return false;
+        }
+    }
+
+    public function unpublish($id){
+        try{
+            $this->db->delete('publish_page', "`pageID` = {$id}");
+            return true;
+        } catch(Exception $e){
+            return false;
+        }
+    }
+
+    public function isPublish($id){
+        return $this->db->select('SELECT * FROM publish_page WHERE pageID=:pageid LIMIT 1',
+            array(
+                'pageid' => $id
+            )
+        );
     }
 }

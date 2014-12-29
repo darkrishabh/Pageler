@@ -15,7 +15,6 @@ class Dashboard extends Controller {
         $this->view->render('header');
         $this->view->render('sidebar');
         $user = $this; $user->loadModel("user");
-
         $this->view->apiKey = $user->model->getAPIKey(Session::get('userid'))['APIKey'];
         $this->view->render('page/index');
         $this->view->render('footer');

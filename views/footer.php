@@ -129,9 +129,18 @@
         $(nameEle).attr('style', 'display:none !important');
         nameEle.after('<input type="text" id="editpageNameLink" style="background:rgb(54, 61, 77); width:65%;' +
         'border:1px solid white;" value="' + nameEle.text() + '"/>');
-        $('#editpageNameLink').focus();
+        $('#editpageNameLink').focus(function(){
+            $(this).on('keypress', function(event) {
+                if (event.keyCode == 13) {
+                    console.log('Enter was pressed');
+                    $(this).blur();
+                }
+            });
+        });
+
         $('#editpageNameLink').blur(function () {
             //update pageName
+            $(this).off('keypress');
             pageName = $('#editpageNameLink').val();
             data = "pageName=" + pageName;
             console.log(data);

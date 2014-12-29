@@ -77,7 +77,22 @@ class Page extends Controller {
 
     }
     public function delete($id){
-        $this->model->delete($id);
+        if( $this->model->delete($id))
+            echo "Success";
+        else echo "Fail";
+
+    }
+
+    public function publish($id){
+      if( $hashkey = $this->model->publish($id))
+          echo $hashkey;
+        else echo "Fail";
+
+    }
+    public function unpublish($id){
+        if( $this->model->unpublish($id))
+            echo "Success";
+        else echo "Fail";
 
     }
 
