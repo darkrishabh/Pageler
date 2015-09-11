@@ -4,16 +4,22 @@ define('SITE_TITLE', 'Pageler');
 // Always provide a TRAILING SLASH (/) AFTER A PATH
 define('URL', 'http://localhost:8888/pageler/');
 define('LIBS', 'libs/');
+$url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+
+$server = $url["host"];
+$username = $url["user"];
+$password = $url["pass"];
+$db = substr($url["path"], 1);
 
 define('DB_TYPE', 'mysql');
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'Pageler');
-define('DB_USER', 'root');
-define('DB_PASS', 'root');
+define('DB_HOST', $server);
+define('DB_NAME', $db);
+define('DB_USER', $username);
+define('DB_PASS', $password);
 
 
-define('GOOGLE_CLIENT_ID', '662672656244-t4n12p66fdnapm2aqos4ota4vtdsgud2.apps.googleusercontent.com');
-define('GOOGLE_CLIENT_SECRET', 'PHUQ1Crxvik6lb3D5P0Um3KS');
+define('GOOGLE_CLIENT_ID', getenv("GOOGLE_CLIENT_ID"));
+define('GOOGLE_CLIENT_SECRET', getenv("GOOGLE_CLIENT_SECRET"));
 
 // The sitewide hashkey, do not change this because its used for passwords!
 // This is for other hash keys... Not sure yet
